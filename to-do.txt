@@ -1,2 +1,4 @@
--> History button shows nothing when empty, and the space above the screens shifts a bit: ugly, wanto to change it.
+---X History button shows nothing when empty, and the space above the screens shifts a bit: ugly, wanto to change it.
+
+-> use localstorage to not lose data on website refresh (use CLI to add/push to branch)
 -> Looks horrible

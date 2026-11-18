@@ -8,6 +8,37 @@ const historyPanel = document.getElementById('history-panel');
 const screen = document.getElementById('screen');
 const keypad = document.getElementById('keypad');
 
+const isInputKey = (key) => {
+    const isDigit = key >= '0' && key <= '9';
+    const isOperatorOrSymbol = [...OPERATORS, '.'].includes(key);
+
+    return isDigit || isOperatorOrSymbol;
+};
+
+document.addEventListener('keydown', (event) => {
+    const keyboardInput = event.key;
+    if (isInputKey(keyboardInput)) {
+        appendInput(keyboardInput);
+        return;
+    }
+
+    switch (keyboardInput) {
+        case 'Enter':
+        case '=':
+            event.preventDefault();
+            calculateResult();
+            break;
+
+        case 'Backspace':
+            deletePreviousInput();
+            break;
+
+        case 'Escape':
+            clearScreen();
+            break;
+    }
+});
+
 const appendInput = (input) => {
     const displayedValue = screen.value;
     const lastInput = screen.value.slice(-1);
