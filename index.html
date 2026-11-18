@@ -9,13 +9,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.js"></script>
 </head>
 <body>
-    <div class="calculator">
+    <div id="calculator" class="calculator">
         <div id="history-panel" class="history-panel hidden"></div>
         <div id="keypad" class="div-keypad">
                 <input type="text" id="screen" class="screen" value="0" readonly>
 
                 <button id="btnAC" class="btn" data-type="ac">AC</button>
-                <button id="btnBack" class="btn" data-type="back">&lt;</button>
+                <button id="btnBack" class="btn" data-type="back">&lt;---</button>
                 <button id="btnPercent" class="btn" data-type="char" data-value="%">%</button>
                 <button id="btnDivision" class="btn" data-type="char" data-value="/">/</button>
 
@@ -40,7 +40,4 @@
                 <button class="btn" data-type="equals">=</button>
         </div>
     </div>
-    
-
-    
 </body>

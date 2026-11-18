@@ -6,16 +6,37 @@ body {
 }
 
 .calculator {
-    width: 50%;
+    position: relative;
+    width: 35%;
     max-width: 450px;
     padding: 20px;
     background-color: darkgray;
     border-radius: 4px;
 }
 
+.calculator.history-open {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
 .history-panel {
+    position: absolute;
+    /* Lo posicionamos por FUERA del borde superior de la calculadora */
+    bottom: 100%; /* Se coloca exactamente apoyado en el borde superior de .calculator */
+    left: 0;
+    right: 0;
+    
+    /* Mantenemos el mismo fondo y bordes redondeados arriba para que parezca una extensión */
+    background-color: darkgray; /* O un tono similar para que combine */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    
     text-align: right;
+    padding: 10px;
     padding-bottom: 5px;
+    
+    /* Opcional: una pequeña sombra o borde si quieres que se distinga */
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .history-item {

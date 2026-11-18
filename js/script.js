@@ -105,7 +105,10 @@ const updateHistoryOnScreen = (expression, result) => {
 }
 
 const showHistory = () => {
-    historyPanel.classList.toggle('hidden');
+    if (history.length > 0) {
+        historyPanel.classList.toggle('hidden');
+        document.getElementById('calculator').classList.toggle('history-open');
+    }
 }
 
 keypad.addEventListener('click', (event) => {
