@@ -1,8 +1,11 @@
-const MAX_SCREEN_LENGTH = 20;
-const MAX_HISTORY_COUNT = 5;
+const MAX_SCREEN_LENGTH = 50;
+const MAX_HISTORY_COUNT = 20;
 const OPERATORS = ['+', '-', '*', '/', '%'];
+const OPERATION_HISTORY_KEY = "operation_history";
 
-const history = [];
+const history = JSON.parse(localStorage.getItem(OPERATION_HISTORY_KEY)) || [];
+
+let latestResult = null;
 
 const historyPanel = document.getElementById('history-panel');
 const screen = document.getElementById('screen');
@@ -113,22 +116,50 @@ const deletePreviousInput = () => {
 const calculateResult = () => {
     const expression = screen.value;
 
+    if (!isValidOperation(expression)) {
+        return;
+    }
+
     try {
         const result = math.evaluate(expression);
         screen.value = result;
 
         updateHistoryOnScreen(expression, result);
+        latestResult = String(result);
+        console.log(latestResult);
     } catch (error) {
         console.error('Error al evaluar la expresión:', error);
         screen.value = 'Error';
     }
 }
 
+const isValidOperation = (expression) => {
+    if (expression === '0') {
+        return false;
+    }
+
+    const lastChar = expression.slice(-1);
+    const invalidOperatorsAtEndOfExpression = OPERATORS.filter(op => op !== '%');
+    
+    if (invalidOperatorsAtEndOfExpression.includes(lastChar)) {
+        return false;
+    }
+
+    if (latestResult === expression) {
+        return false;
+    }
+
+    return true;
+}
+
 const updateHistoryOnScreen = (expression, result) => {
     if (history.length >= MAX_HISTORY_COUNT) history.shift();
+    const historyPanelList = document.getElementById('history-list');
 
     history.push(`${expression} = ${result}`);
-    historyPanel.innerHTML = history
+    localStorage.setItem(OPERATION_HISTORY_KEY, JSON.stringify(history));
+
+    historyPanelList.innerHTML = history
         .map(entry => `<div class="history-item">${entry}</div>`)
         .join('');
         

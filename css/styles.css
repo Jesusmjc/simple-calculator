@@ -20,14 +20,15 @@ body {
 }
 
 .history-panel {
+    max-height: 180px;
+    overflow-y: auto;
+
     position: absolute;
-    /* Lo posicionamos por FUERA del borde superior de la calculadora */
-    bottom: 100%; /* Se coloca exactamente apoyado en el borde superior de .calculator */
+    bottom: 100%;
     left: 0;
     right: 0;
     
-    /* Mantenemos el mismo fondo y bordes redondeados arriba para que parezca una extensión */
-    background-color: darkgray; /* O un tono similar para que combine */
+    background-color: darkgray; 
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     
@@ -35,13 +36,23 @@ body {
     padding: 10px;
     padding-bottom: 5px;
     
-    /* Opcional: una pequeña sombra o borde si quieres que se distinga */
     box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .history-item {
     padding-bottom: 2.5px;
     padding-top: 2.5px;
+}
+
+#history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#lista-historial li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
 }
 
 .hidden {
