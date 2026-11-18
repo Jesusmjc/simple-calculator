@@ -1,0 +1,2 @@
+-> History button shows nothing when empty, and the space above the screens shifts a bit: ugly, wanto to change it.
+-> Looks horrible
