@@ -3,8 +3,6 @@ const MAX_HISTORY_COUNT = 20;
 const OPERATORS = ['+', '-', '*', '/', '%'];
 const OPERATION_HISTORY_KEY = "operation_history";
 
-const history = JSON.parse(localStorage.getItem(OPERATION_HISTORY_KEY)) || [];
-
 let latestResult = null;
 
 const historyPanel = document.getElementById('history-panel');
@@ -123,10 +121,9 @@ const calculateResult = () => {
     try {
         const result = math.evaluate(expression);
         screen.value = result;
-
-        updateHistoryOnScreen(expression, result);
+        saveOperationToHistory(expression, result);
+        updateHistoryOnScreen();
         latestResult = String(result);
-        console.log(latestResult);
     } catch (error) {
         console.error('Error al evaluar la expresión:', error);
         screen.value = 'Error';
@@ -152,12 +149,14 @@ const isValidOperation = (expression) => {
     return true;
 }
 
-const updateHistoryOnScreen = (expression, result) => {
+const saveOperationToHistory = (operation, result) => {
     if (history.length >= MAX_HISTORY_COUNT) history.shift();
-    const historyPanelList = document.getElementById('history-list');
-
-    history.push(`${expression} = ${result}`);
+    history.push(`${operation} = ${result}`);
     localStorage.setItem(OPERATION_HISTORY_KEY, JSON.stringify(history));
+}
+
+const updateHistoryOnScreen = () => {
+    const historyPanelList = document.getElementById('history-list');
 
     historyPanelList.innerHTML = history
         .map(entry => `<div class="history-item">${entry}</div>`)
@@ -197,3 +196,6 @@ keypad.addEventListener('click', (event) => {
             break;
     }
 });
+
+const history = JSON.parse(localStorage.getItem(OPERATION_HISTORY_KEY)) || [];
+updateHistoryOnScreen();
