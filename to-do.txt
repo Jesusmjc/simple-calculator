@@ -1,6 +1,0 @@
----X History button shows nothing when empty, and the space above the screens shifts a bit: ugly, wanto to change it.
-
--> use localstorage to not lose data on website refresh (use CLI to add/push to branch)
-    -> bug: history does save to local storage, but on refresh previous operations don't show unless you do a new operation, then the new operation
-        is shown alongside all previous operations in history
--> Looks horrible

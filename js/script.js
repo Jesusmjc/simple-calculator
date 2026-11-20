@@ -8,6 +8,7 @@ let latestResult = null;
 const historyPanel = document.getElementById('history-panel');
 const screen = document.getElementById('screen');
 const keypad = document.getElementById('keypad');
+const btnClearHistory = document.getElementById('btn-clear-history');
 
 const isInputKey = (key) => {
     const isDigit = key >= '0' && key <= '9';
@@ -172,6 +173,12 @@ const showHistory = () => {
     }
 }
 
+const clearHistory = () => {
+    history.length = 0;
+    localStorage.removeItem(OPERATION_HISTORY_KEY);
+    updateHistoryOnScreen();
+}
+
 keypad.addEventListener('click', (event) => {
     const buttonPressed = event.target.closest('button');
     if (!buttonPressed) return;
@@ -195,6 +202,10 @@ keypad.addEventListener('click', (event) => {
             showHistory();
             break;
     }
+});
+
+btnClearHistory.addEventListener('click', () => {
+    clearHistory();
 });
 
 const history = JSON.parse(localStorage.getItem(OPERATION_HISTORY_KEY)) || [];
