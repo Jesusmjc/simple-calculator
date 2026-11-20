@@ -2,13 +2,16 @@ const MAX_SCREEN_LENGTH = 50;
 const MAX_HISTORY_COUNT = 20;
 const OPERATORS = ['+', '-', '*', '/', '%'];
 const OPERATION_HISTORY_KEY = "operation_history";
+const DARK_MODE_KEY = "dark_mode";
 
 let latestResult = null;
+let isDarkModeOn = JSON.parse(localStorage.getItem(DARK_MODE_KEY)) || false;
 
 const historyPanel = document.getElementById('history-panel');
 const screen = document.getElementById('screen');
 const keypad = document.getElementById('keypad');
 const btnClearHistory = document.getElementById('btn-clear-history');
+const btnDarkMode = document.getElementById('btn-dark-mode');
 
 const isInputKey = (key) => {
     const isDigit = key >= '0' && key <= '9';
@@ -39,6 +42,16 @@ document.addEventListener('keydown', (event) => {
             clearScreen();
             break;
     }
+});
+
+const switchDarkMode = () => {
+    isDarkModeOn = document.body.classList.toggle('dark-theme', !isDarkModeOn);
+    localStorage.setItem(DARK_MODE_KEY, JSON.stringify(isDarkModeOn));
+    btnDarkMode.textContent = isDarkModeOn ? 'Light Mode' : 'Dark Mode';
+};
+
+btnDarkMode.addEventListener('click', () => {
+    switchDarkMode();
 });
 
 const appendInput = (input) => {
