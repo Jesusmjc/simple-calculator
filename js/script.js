@@ -5,7 +5,7 @@ const OPERATION_HISTORY_KEY = "operation_history";
 const DARK_MODE_KEY = "dark_mode";
 
 let latestResult = null;
-let isDarkModeOn = JSON.parse(localStorage.getItem(DARK_MODE_KEY)) || false;
+
 
 const historyPanel = document.getElementById('history-panel');
 const screen = document.getElementById('screen');
@@ -44,14 +44,15 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-const switchDarkMode = () => {
-    isDarkModeOn = document.body.classList.toggle('dark-theme', !isDarkModeOn);
-    localStorage.setItem(DARK_MODE_KEY, JSON.stringify(isDarkModeOn));
+const updateTheme = () => {
+    document.body.classList.toggle('dark-theme', isDarkModeOn);
     btnDarkMode.textContent = isDarkModeOn ? 'Light Mode' : 'Dark Mode';
 };
 
 btnDarkMode.addEventListener('click', () => {
-    switchDarkMode();
+    isDarkModeOn = !isDarkModeOn;
+    localStorage.setItem(DARK_MODE_KEY, JSON.stringify(isDarkModeOn));
+    updateTheme();
 });
 
 const appendInput = (input) => {
@@ -175,8 +176,6 @@ const updateHistoryOnScreen = () => {
     historyPanelList.innerHTML = history
         .map(entry => `<div class="history-item">${entry}</div>`)
         .join('');
-        
-    console.log(history);
 }
 
 const showHistory = () => {
@@ -223,3 +222,6 @@ btnClearHistory.addEventListener('click', () => {
 
 const history = JSON.parse(localStorage.getItem(OPERATION_HISTORY_KEY)) || [];
 updateHistoryOnScreen();
+
+let isDarkModeOn = JSON.parse(localStorage.getItem(DARK_MODE_KEY)) || false;
+updateTheme();
