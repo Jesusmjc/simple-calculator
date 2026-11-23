@@ -6,6 +6,8 @@ const DARK_MODE_KEY = "dark_mode";
 
 let latestResult = null;
 
+let isConfirmingClear = false;
+let confirmTimeoutId = null;
 
 const historyPanel = document.getElementById('history-panel');
 const screen = document.getElementById('screen');
@@ -54,6 +56,12 @@ btnDarkMode.addEventListener('click', () => {
     localStorage.setItem(DARK_MODE_KEY, JSON.stringify(isDarkModeOn));
     updateTheme();
 });
+
+const resetClearPrompt = () => {
+    isConfirmingClear = false;
+    btnClearHistory.textContent = 'Clear History';
+    clearTimeout(confirmTimeoutId);
+};
 
 const appendInput = (input) => {
     const displayedValue = screen.value;
@@ -217,6 +225,17 @@ keypad.addEventListener('click', (event) => {
 });
 
 btnClearHistory.addEventListener('click', () => {
+    if (history.length === 0) return;
+
+    if (!isConfirmingClear) {
+        isConfirmingClear = true;
+        btnClearHistory.textContent = 'Are you sure?';
+
+        confirmTimeoutId = setTimeout(resetClearPrompt, 4000);
+        return;
+    }
+
+    resetClearPrompt();
     clearHistory();
 });
 
