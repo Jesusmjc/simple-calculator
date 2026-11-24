@@ -1,3 +1,6 @@
+export const DEFAULT_LANG = "en";
+export const LANG_STORAGE_KEY = "calc-lang";
+
 export const translations = {
     es: {
         title: "EZ Calculadora",
@@ -56,6 +59,3 @@ export const languageManager = {
         document.documentElement.lang = this.current;
     }
 }
-
-export const DEFAULT_LANG = "en";
-export const LANG_STORAGE_KEY = "calc-lang";
