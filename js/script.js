@@ -1,11 +1,12 @@
-const MAX_SCREEN_LENGTH = 50;
+import { languageManager } from "./i18n.js";
+
+const MAX_SCREEN_LENGTH = 40;
 const MAX_HISTORY_COUNT = 20;
 const OPERATORS = ['+', '-', '*', '/', '%'];
 const OPERATION_HISTORY_KEY = "operation_history";
 const DARK_MODE_KEY = "dark_mode";
 
 let latestResult = null;
-
 let isConfirmingClear = false;
 let confirmTimeoutId = null;
 
@@ -14,6 +15,30 @@ const screen = document.getElementById('screen');
 const keypad = document.getElementById('keypad');
 const btnClearHistory = document.getElementById('btn-clear-history');
 const btnDarkMode = document.getElementById('btn-dark-mode');
+
+export function applyNewLanguage() { 
+    const languageStrings = languageManager.getTexts();
+
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.dataset.i18n;
+        const text = languageStrings[key];
+        if (text === undefined) return;
+
+        if (el.tagName === "TITLE") {
+            document.title = text;
+        } else {
+            el.textContent = text;
+        }
+    });
+
+    updateThemeButton();
+};
+
+document.getElementById('btn-change-language').addEventListener('click', () => {
+    cancelClearPrompt();
+    languageManager.setNextLanguage();
+    applyNewLanguage();
+});
 
 const isInputKey = (key) => {
     const isDigit = key >= '0' && key <= '9';
@@ -48,7 +73,13 @@ document.addEventListener('keydown', (event) => {
 
 const updateTheme = () => {
     document.body.classList.toggle('dark-theme', isDarkModeOn);
-    btnDarkMode.textContent = isDarkModeOn ? 'Light Mode' : 'Dark Mode';
+
+    updateThemeButton();
+};
+
+const updateThemeButton = () => {
+    const { lightTheme, darkTheme } = languageManager.getTexts();
+    btnDarkMode.textContent = isDarkModeOn ? lightTheme: darkTheme;
 };
 
 btnDarkMode.addEventListener('click', () => {
@@ -59,7 +90,7 @@ btnDarkMode.addEventListener('click', () => {
 
 const resetClearPrompt = () => {
     isConfirmingClear = false;
-    btnClearHistory.textContent = 'Clear History';
+    btnClearHistory.textContent = languageManager.getTexts().clearHistory;
     clearTimeout(confirmTimeoutId);
 };
 
@@ -226,10 +257,11 @@ keypad.addEventListener('click', (event) => {
 
 btnClearHistory.addEventListener('click', () => {
     if (history.length === 0) return;
+    const confirmationString = languageManager.getTexts().clearHistoryConfirmation;
 
     if (!isConfirmingClear) {
         isConfirmingClear = true;
-        btnClearHistory.textContent = 'Are you sure?';
+        btnClearHistory.textContent = confirmationString;
 
         confirmTimeoutId = setTimeout(resetClearPrompt, 4000);
         return;
@@ -239,8 +271,18 @@ btnClearHistory.addEventListener('click', () => {
     clearHistory();
 });
 
+const cancelClearPrompt = () => {
+    if (!isConfirmingClear) return;
+    clearTimeout(confirmTimeoutId);
+    confirmTimeoutId = null;
+    resetClearPrompt();
+}
+
 const history = JSON.parse(localStorage.getItem(OPERATION_HISTORY_KEY)) || [];
 updateHistoryOnScreen();
 
 let isDarkModeOn = JSON.parse(localStorage.getItem(DARK_MODE_KEY)) || false;
 updateTheme();
+
+languageManager.init();
+applyNewLanguage();
